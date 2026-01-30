@@ -149,24 +149,24 @@
 **遵循 constitution.md 的开发顺序: Domain → Contract → Adapter → UI**
 
 ### 目录结构文档
-- [ ] T063 [US2] 在 apps/app-expo/ 创建 README.md (说明目录结构)
-- [ ] T064 [P] [US2] 在 packages/domain/ 创建 README.md (说明 Domain Layer 职责)
-- [ ] T065 [P] [US2] 在 packages/bridge-contract/ 创建 README.md (说明 Contract 规范)
+- [x] T063 [US2] 在 apps/app-expo/ 创建 README.md (说明目录结构)
+- [x] T064 [P] [US2] 在 packages/domain/ 创建 README.md (说明 Domain Layer 职责)
+- [x] T065 [P] [US2] 在 packages/bridge-contract/ 创建 README.md (说明 Contract 规范)
 
 ### 示例代码完善
-- [ ] T066 [P] [US2] 完善 packages/domain/entities/User.ts (添加注释和示例)
-- [ ] T067 [P] [US2] 完善 packages/domain/usecases/bootstrap.ts (添加注释和示例)
-- [ ] T068 [P] [US2] 完善 apps/app-expo/components/Button.tsx (添加注释和使用示例)
+- [x] T066 [P] [US2] 完善 packages/domain/entities/User.ts (添加注释和示例)
+- [x] T067 [P] [US2] 完善 packages/domain/usecases/bootstrap.ts (添加注释和示例)
+- [x] T068 [P] [US2] 完善 apps/app-expo/components/Button.tsx (添加注释和使用示例)
 
 ### 代码组织规范
-- [ ] T069 [US2] 创建 docs/CODE_ORGANIZATION.md (代码组织规范文档)
-- [ ] T070 [US2] 创建 docs/NAMING_CONVENTIONS.md (命名规范文档)
-- [ ] T071 [US2] 创建 docs/FILE_STRUCTURE.md (文件结构说明)
+- [x] T069 [US2] 创建 docs/CODE_ORGANIZATION.md (代码组织规范文档)
+- [x] T070 [US2] 创建 docs/NAMING_CONVENTIONS.md (命名规范文档)
+- [x] T071 [US2] 创建 docs/FILE_STRUCTURE.md (文件结构说明)
 
 ### 验证
-- [ ] T072 [US2] 验证所有目录都有 README.md 说明
-- [ ] T073 [US2] 验证示例代码符合规范
-- [ ] T074 [US2] 验证文档完整性 >= 90%
+- [x] T072 [US2] 验证所有目录都有 README.md 说明
+- [x] T073 [US2] 验证示例代码符合规范
+- [x] T074 [US2] 验证文档完整性 >= 90%
 
 **Checkpoint**: 此时 User Stories 1 和 2 都应独立工作
 
