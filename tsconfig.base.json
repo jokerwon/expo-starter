@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "commonjs",
+    "jsx": "react-native",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@expo-starter/domain": ["./packages/domain/src"],
+      "@expo-starter/bridge-contract": ["./packages/bridge-contract/src"],
+      "@expo-starter/bridge-runtime": ["./packages/bridge-runtime/src"],
+      "@expo-starter/api-client": ["./packages/api-client/src"],
+      "@expo-starter/ui-tokens": ["./packages/ui-tokens/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build", ".expo"]
+}

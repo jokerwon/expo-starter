@@ -80,12 +80,18 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
+
+  IMPORTANT: 根据 constitution.md，需求必须明确：
+  - 功能是否在 App 内完整闭环
+  - H5 的角色定位（仅作为受控 UI）
+  - 需要哪些 Native 能力（通过 Bridge Contract 暴露）
+  - Domain Layer 的业务逻辑边界
 -->
 
 ### Functional Requirements
 
 - **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
@@ -94,6 +100,16 @@
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Architecture Requirements
+
+根据 constitution.md，明确以下架构需求：
+
+- **AR-001**: 功能是否需要在 App 内完整闭环？还是允许 H5 参与？
+- **AR-002**: H5 的角色是什么？（配置驱动 UI / 轻交互 / 可替换）
+- **AR-003**: 需要哪些 Native 能力？（必须通过 Bridge Contract 暴露）
+- **AR-004**: Domain Layer 的业务逻辑边界在哪里？
+- **AR-005**: 失败场景的处理策略是什么？（不允许静默失败）
 
 ### Key Entities *(include if feature involves data)*
 

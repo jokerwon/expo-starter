@@ -60,14 +60,31 @@ description: "Task list template for feature implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-Examples of foundational tasks (adjust based on your project):
+**根据 constitution.md，基础设施必须遵循分层架构**：
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+### Bridge Contract Layer (优先级最高)
+- [ ] T004 Define Bridge Contract v1 in packages/bridge-contract/v1/
+- [ ] T005 [P] Define capability interfaces (TypeScript types only)
+- [ ] T006 [P] Define event interfaces
+- [ ] T007 Setup Contract versioning strategy
+
+### Domain Layer (第二优先级)
+- [ ] T008 Create domain entities in packages/domain/entities/
+- [ ] T009 [P] Define use cases in packages/domain/usecases/
+- [ ] T010 [P] Setup domain business rules
+- [ ] T011 Ensure Domain has NO UI/Runtime dependencies
+
+### Bridge Adapter Layer (第三优先级)
+- [ ] T012 Implement RN Bridge Adapter in apps/app-expo/bridge/
+- [ ] T013 [P] Implement H5 Bridge Adapter in apps/web-h5/bridge/
+- [ ] T014 [P] Setup bridge-runtime utilities in packages/bridge-runtime/
+- [ ] T015 Ensure Adapters only do protocol mapping (no business logic)
+
+### Infrastructure (并行)
+- [ ] T016 [P] Setup API client in packages/api-client/
+- [ ] T017 [P] Configure error handling and logging
+- [ ] T018 [P] Setup environment configuration
+- [ ] T019 [P] Define failure and degradation strategies
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -88,12 +105,29 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+**遵循 constitution.md 的开发顺序：Domain → Contract → Adapter → UI**
+
+#### Domain Layer (优先)
+- [ ] T012 [P] [US1] Create [Entity1] in packages/domain/entities/[entity1].ts
+- [ ] T013 [P] [US1] Create [Entity2] in packages/domain/entities/[entity2].ts
+- [ ] T014 [US1] Implement [UseCase] in packages/domain/usecases/[usecase].ts (depends on T012, T013)
+- [ ] T015 [US1] Verify Domain has NO UI dependencies (import check)
+
+#### Bridge Contract (如需新能力)
+- [ ] T016 [US1] Add new capabilities to packages/bridge-contract/v1/ (if needed)
+- [ ] T017 [US1] Review capability against 准入原则 (多业务可复用、系统级意义、非纯 UI)
+
+#### Adapter Layer
+- [ ] T018 [P] [US1] Implement RN Adapter methods in apps/app-expo/bridge/
+- [ ] T019 [P] [US1] Implement H5 Adapter methods in apps/web-h5/bridge/
+- [ ] T020 [US1] Verify Adapters only do protocol mapping (no business logic)
+
+#### UI Layer (最后)
+- [ ] T021 [P] [US1] Implement App UI in apps/app-expo/features/[feature]/
+- [ ] T022 [P] [US1] Implement H5 UI in apps/web-h5/pages/[page]/ (if needed)
+- [ ] T023 [US1] Verify H5 does NOT hold login state, decide payment, or request permissions
+- [ ] T024 [US1] Add validation and error handling
+- [ ] T025 [US1] Add logging for user story 1 operations
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -112,10 +146,25 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+**遵循 constitution.md 的开发顺序：Domain → Contract → Adapter → UI**
+
+#### Domain Layer (优先)
+- [ ] T020 [P] [US2] Create [Entity] in packages/domain/entities/[entity].ts
+- [ ] T021 [US2] Implement [UseCase] in packages/domain/usecases/[usecase].ts
+- [ ] T022 [US2] Verify Domain has NO UI dependencies
+
+#### Bridge Contract (如需新能力)
+- [ ] T023 [US2] Add new capabilities to packages/bridge-contract/v1/ (if needed)
+
+#### Adapter Layer
+- [ ] T024 [P] [US2] Implement RN Adapter methods in apps/app-expo/bridge/
+- [ ] T025 [P] [US2] Implement H5 Adapter methods in apps/web-h5/bridge/
+
+#### UI Layer (最后)
+- [ ] T026 [P] [US2] Implement App UI in apps/app-expo/features/[feature]/
+- [ ] T027 [P] [US2] Implement H5 UI in apps/web-h5/pages/[page]/ (if needed)
+- [ ] T028 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T029 [US2] Verify architecture compliance
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -134,9 +183,24 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+**遵循 constitution.md 的开发顺序：Domain → Contract → Adapter → UI**
+
+#### Domain Layer (优先)
+- [ ] T026 [P] [US3] Create [Entity] in packages/domain/entities/[entity].ts
+- [ ] T027 [US3] Implement [UseCase] in packages/domain/usecases/[usecase].ts
+- [ ] T028 [US3] Verify Domain has NO UI dependencies
+
+#### Bridge Contract (如需新能力)
+- [ ] T029 [US3] Add new capabilities to packages/bridge-contract/v1/ (if needed)
+
+#### Adapter Layer
+- [ ] T030 [P] [US3] Implement RN Adapter methods in apps/app-expo/bridge/
+- [ ] T031 [P] [US3] Implement H5 Adapter methods in apps/web-h5/bridge/
+
+#### UI Layer (最后)
+- [ ] T032 [P] [US3] Implement App UI in apps/app-expo/features/[feature]/
+- [ ] T033 [P] [US3] Implement H5 UI in apps/web-h5/pages/[page]/ (if needed)
+- [ ] T034 [US3] Verify architecture compliance
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -150,11 +214,27 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
+**根据 constitution.md 进行最终合规性检查**：
+
+### Architecture Compliance Review
+- [ ] TXXX Verify App 是唯一主运行时（所有业务在 App 内闭环）
+- [ ] TXXX Verify H5 仅作为受控 UI（无登录态、支付决策、系统权限）
+- [ ] TXXX Verify Bridge Contract 完整性（所有 Native 能力已暴露）
+- [ ] TXXX Verify Domain Layer 纯粹性（无 UI/Runtime 依赖）
+- [ ] TXXX Verify 分层依赖正确性（UI → Adapter → Contract → Domain → Native）
+- [ ] TXXX Verify 失败策略明确性（无静默失败）
+
+### Code Quality
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
 - [ ] TXXX Security hardening
+
+### Final Validation
+- [ ] TXXX Test: 删除 web-h5 项目，App 是否仍正常运行？
+- [ ] TXXX Test: Domain 是否可独立测试（无 UI 依赖）？
+- [ ] TXXX Test: Bridge Contract 是否可演进（版本化）？
 - [ ] TXXX Run quickstart.md validation
 
 ---

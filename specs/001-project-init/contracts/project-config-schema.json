@@ -1,0 +1,473 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Expo Starter Project Configuration Schema",
+  "description": "JSON Schema for validating project configuration files",
+  "definitions": {
+    "monorepoConfig": {
+      "type": "object",
+      "required": ["name", "private", "workspaces", "engines"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Project name in kebab-case"
+        },
+        "private": {
+          "type": "boolean",
+          "const": true,
+          "description": "Must be true for monorepo root"
+        },
+        "workspaces": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "contains": {
+            "enum": ["apps/*", "packages/*"]
+          },
+          "description": "Workspace package patterns"
+        },
+        "scripts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Global scripts"
+        },
+        "devDependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Global dev dependencies"
+        },
+        "engines": {
+          "type": "object",
+          "required": ["node", "pnpm"],
+          "properties": {
+            "node": {
+              "type": "string",
+              "pattern": "^>=18\\.0\\.0$",
+              "description": "Node.js version requirement"
+            },
+            "pnpm": {
+              "type": "string",
+              "pattern": "^>=8\\.0\\.0$",
+              "description": "pnpm version requirement"
+            }
+          }
+        }
+      }
+    },
+    "expoConfig": {
+      "type": "object",
+      "required": ["expo"],
+      "properties": {
+        "expo": {
+          "type": "object",
+          "required": ["name", "slug", "version", "sdkVersion", "platforms"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "description": "App display name"
+            },
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$",
+              "description": "App unique identifier"
+            },
+            "version": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$",
+              "description": "Semantic version"
+            },
+            "sdkVersion": {
+              "type": "string",
+              "pattern": "^\\d+\\.0\\.0$",
+              "description": "Expo SDK version"
+            },
+            "platforms": {
+              "type": "array",
+              "items": {
+                "enum": ["ios", "android", "web"]
+              },
+              "minItems": 1,
+              "uniqueItems": true,
+              "description": "Supported platforms"
+            },
+            "orientation": {
+              "enum": ["portrait", "landscape", "default"],
+              "description": "App orientation"
+            },
+            "icon": {
+              "type": "string",
+              "description": "Path to app icon"
+            },
+            "splash": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string"
+                },
+                "resizeMode": {
+                  "enum": ["contain", "cover", "native"]
+                },
+                "backgroundColor": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                }
+              }
+            },
+            "ios": {
+              "type": "object",
+              "properties": {
+                "supportsTablet": {
+                  "type": "boolean"
+                },
+                "bundleIdentifier": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$"
+                }
+              }
+            },
+            "android": {
+              "type": "object",
+              "properties": {
+                "package": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+                },
+                "adaptiveIcon": {
+                  "type": "object",
+                  "properties": {
+                    "foregroundImage": {
+                      "type": "string"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "pattern": "^#[0-9A-Fa-f]{6}$"
+                    }
+                  }
+                }
+              }
+            },
+            "web": {
+              "type": "object",
+              "properties": {
+                "favicon": {
+                  "type": "string"
+                }
+              }
+            },
+            "extra": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "Custom environment variables"
+            }
+          }
+        }
+      }
+    },
+    "typescriptConfig": {
+      "type": "object",
+      "properties": {
+        "extends": {
+          "type": "string",
+          "description": "Path to base config"
+        },
+        "compilerOptions": {
+          "type": "object",
+          "required": ["target", "module", "strict"],
+          "properties": {
+            "target": {
+              "enum": ["ES2022", "ES2023", "ESNext"],
+              "description": "ECMAScript target version"
+            },
+            "lib": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "module": {
+              "enum": ["commonjs", "esnext", "node16"],
+              "description": "Module system"
+            },
+            "jsx": {
+              "enum": ["react", "react-native", "react-jsx"],
+              "description": "JSX compilation mode"
+            },
+            "strict": {
+              "type": "boolean",
+              "const": true,
+              "description": "Enable all strict type checking"
+            },
+            "esModuleInterop": {
+              "type": "boolean"
+            },
+            "skipLibCheck": {
+              "type": "boolean"
+            },
+            "resolveJsonModule": {
+              "type": "boolean"
+            },
+            "moduleResolution": {
+              "enum": ["node", "node16", "bundler"]
+            },
+            "allowSyntheticDefaultImports": {
+              "type": "boolean"
+            },
+            "forceConsistentCasingInFileNames": {
+              "type": "boolean"
+            },
+            "declaration": {
+              "type": "boolean"
+            },
+            "declarationMap": {
+              "type": "boolean"
+            },
+            "composite": {
+              "type": "boolean"
+            },
+            "incremental": {
+              "type": "boolean"
+            },
+            "baseUrl": {
+              "type": "string"
+            },
+            "paths": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "rootDir": {
+              "type": "string"
+            },
+            "outDir": {
+              "type": "string"
+            }
+          }
+        },
+        "include": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "packageConfig": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^(@[a-z0-9-]+/)?[a-z0-9-]+$",
+          "description": "Package name"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version"
+        },
+        "private": {
+          "type": "boolean",
+          "description": "Whether package is private"
+        },
+        "main": {
+          "type": "string",
+          "description": "Entry point file"
+        },
+        "types": {
+          "type": "string",
+          "description": "TypeScript definitions file"
+        },
+        "scripts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "devDependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "peerDependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "eslintConfig": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "boolean"
+        },
+        "extends": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "parser": {
+          "type": "string"
+        },
+        "parserOptions": {
+          "type": "object",
+          "properties": {
+            "ecmaVersion": {
+              "type": "number",
+              "minimum": 2022
+            },
+            "sourceType": {
+              "enum": ["module", "script"]
+            },
+            "project": {
+              "type": "string"
+            }
+          }
+        },
+        "plugins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rules": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "ignorePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "prettierConfig": {
+      "type": "object",
+      "properties": {
+        "semi": {
+          "type": "boolean"
+        },
+        "singleQuote": {
+          "type": "boolean"
+        },
+        "trailingComma": {
+          "enum": ["none", "es5", "all"]
+        },
+        "printWidth": {
+          "type": "number",
+          "minimum": 80,
+          "maximum": 120
+        },
+        "tabWidth": {
+          "type": "number",
+          "enum": [2, 4]
+        },
+        "arrowParens": {
+          "enum": ["avoid", "always"]
+        }
+      }
+    },
+    "environmentConfig": {
+      "type": "object",
+      "properties": {
+        "API_BASE_URL": {
+          "type": "string",
+          "format": "uri",
+          "description": "API base URL"
+        },
+        "API_TIMEOUT": {
+          "type": "number",
+          "minimum": 1000,
+          "description": "API timeout in milliseconds"
+        },
+        "ENABLE_ANALYTICS": {
+          "type": "boolean",
+          "description": "Enable analytics"
+        },
+        "ENABLE_DEBUG_MODE": {
+          "type": "boolean",
+          "description": "Enable debug mode"
+        },
+        "APP_NAME": {
+          "type": "string",
+          "description": "Application name"
+        },
+        "APP_VERSION": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Application version"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "title": "Monorepo Root Config",
+      "$ref": "#/definitions/monorepoConfig"
+    },
+    {
+      "title": "Expo App Config",
+      "$ref": "#/definitions/expoConfig"
+    },
+    {
+      "title": "TypeScript Config",
+      "$ref": "#/definitions/typescriptConfig"
+    },
+    {
+      "title": "Package Config",
+      "$ref": "#/definitions/packageConfig"
+    },
+    {
+      "title": "ESLint Config",
+      "$ref": "#/definitions/eslintConfig"
+    },
+    {
+      "title": "Prettier Config",
+      "$ref": "#/definitions/prettierConfig"
+    },
+    {
+      "title": "Environment Config",
+      "$ref": "#/definitions/environmentConfig"
+    }
+  ]
+}

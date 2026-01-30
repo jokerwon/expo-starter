@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "strict": true,
+    "jsx": "react-native",
+    "lib": ["ES2022"],
+    "types": ["react-native"],
+    "baseUrl": ".",
+    "paths": {
+      "@expo-starter/domain": ["../../packages/domain/src"],
+      "@expo-starter/bridge-contract": ["../../packages/bridge-contract/src"],
+      "@expo-starter/bridge-runtime": ["../../packages/bridge-runtime/src"],
+      "@expo-starter/ui-tokens": ["../../packages/ui-tokens/src"]
+    }
+  },
+  "include": ["**/*"],
+  "exclude": ["node_modules", "dist", ".expo", "expo-module"],
+  "references": [
+    { "path": "../../packages/domain" },
+    { "path": "../../packages/bridge-contract" },
+    { "path": "../../packages/bridge-runtime" },
+    { "path": "../../packages/ui-tokens" }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workspace Structure Definition",
+  "description": "Defines the structure and dependencies of the monorepo workspace",
+  "type": "object",
+  "required": ["version", "structure", "dependencies", "buildOrder"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Structure definition version"
+    },
+    "structure": {
+      "type": "object",
+      "required": ["apps", "packages"],
+      "properties": {
+        "apps": {
+          "type": "array",
+          "description": "Application packages",
+          "items": {
+            "type": "object",
+            "required": ["name", "path", "type"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "description": "App name"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^apps/[a-z0-9-]+$",
+                "description": "Relative path from root"
+              },
+              "type": {
+                "enum": ["expo", "web", "cli"],
+                "description": "Application type"
+              },
+              "description": {
+                "type": "string",
+                "description": "App description"
+              }
+            }
+          }
+        },
+        "packages": {
+          "type": "array",
+          "description": "Library packages",
+          "items": {
+            "type": "object",
+            "required": ["name", "path", "type"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$",
+                "description": "Package name with scope"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^packages/[a-z0-9-]+$",
+                "description": "Relative path from root"
+              },
+              "type": {
+                "enum": ["domain", "contract", "runtime", "client", "ui", "util"],
+                "description": "Package type"
+              },
+              "description": {
+                "type": "string",
+                "description": "Package description"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Package dependency graph",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of dependencies for this package"
+      }
+    },
+    "buildOrder": {
+      "type": "array",
+      "description": "Topologically sorted build order",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Architectural constraints",
+      "properties": {
+        "allowedDependencies": {
+          "type": "object",
+          "description": "Allowed dependency patterns by package type",
+          "properties": {
+            "apps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Apps can depend on packages"
+            },
+            "domain": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Domain can only depend on itself"
+            },
+            "contract": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Contract has no dependencies"
+            },
+            "runtime": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Runtime can depend on contract"
+            },
+            "client": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Client can depend on contract and domain"
+            }
+          }
+        },
+        "forbiddenDependencies": {
+          "type": "array",
+          "description": "Explicitly forbidden dependency patterns",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "reason"],
+            "properties": {
+              "from": {
+                "type": "string",
+                "description": "Source package pattern"
+              },
+              "to": {
+                "type": "string",
+                "description": "Target package pattern"
+              },
+              "reason": {
+                "type": "string",
+                "description": "Why this dependency is forbidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "version": "1.0.0",
+    "structure": {
+      "apps": [
+        {
+          "name": "app-expo",
+          "path": "apps/app-expo",
+          "type": "expo",
+          "description": "Main Expo application (primary runtime)"
+        },
+        {
+          "name": "web-h5",
+          "path": "apps/web-h5",
+          "type": "web",
+          "description": "Web H5 application (subordinate UI runtime)"
+        }
+      ],
+      "packages": [
+        {
+          "name": "@expo-starter/domain",
+          "path": "packages/domain",
+          "type": "domain",
+          "description": "Business logic layer (UI-agnostic)"
+        },
+        {
+          "name": "@expo-starter/bridge-contract",
+          "path": "packages/bridge-contract",
+          "type": "contract",
+          "description": "Native capability contracts (versioned)"
+        },
+        {
+          "name": "@expo-starter/bridge-runtime",
+          "path": "packages/bridge-runtime",
+          "type": "runtime",
+          "description": "JSBridge runtime implementation"
+        },
+        {
+          "name": "@expo-starter/api-client",
+          "path": "packages/api-client",
+          "type": "client",
+          "description": "HTTP API client"
+        },
+        {
+          "name": "@expo-starter/ui-tokens",
+          "path": "packages/ui-tokens",
+          "type": "ui",
+          "description": "Design tokens (colors, spacing, etc.)"
+        }
+      ]
+    },
+    "dependencies": {
+      "app-expo": [
+        "@expo-starter/domain",
+        "@expo-starter/bridge-contract",
+        "@expo-starter/bridge-runtime",
+        "@expo-starter/ui-tokens"
+      ],
+      "web-h5": [
+        "@expo-starter/domain",
+        "@expo-starter/bridge-contract",
+        "@expo-starter/ui-tokens"
+      ],
+      "@expo-starter/domain": [],
+      "@expo-starter/bridge-contract": [],
+      "@expo-starter/bridge-runtime": [
+        "@expo-starter/bridge-contract"
+      ],
+      "@expo-starter/api-client": [
+        "@expo-starter/domain"
+      ],
+      "@expo-starter/ui-tokens": []
+    },
+    "buildOrder": [
+      "@expo-starter/bridge-contract",
+      "@expo-starter/domain",
+      "@expo-starter/ui-tokens",
+      "@expo-starter/bridge-runtime",
+      "@expo-starter/api-client",
+      "app-expo",
+      "web-h5"
+    ],
+    "constraints": {
+      "allowedDependencies": {
+        "apps": ["@expo-starter/*"],
+        "domain": [],
+        "contract": [],
+        "runtime": ["@expo-starter/bridge-contract"],
+        "client": ["@expo-starter/domain", "@expo-starter/bridge-contract"]
+      },
+      "forbiddenDependencies": [
+        {
+          "from": "@expo-starter/domain",
+          "to": "react-native",
+          "reason": "Domain layer must be UI-agnostic (constitution.md principle IV)"
+        },
+        {
+          "from": "@expo-starter/domain",
+          "to": "react",
+          "reason": "Domain layer must be UI-agnostic (constitution.md principle IV)"
+        },
+        {
+          "from": "@expo-starter/*",
+          "to": "app-expo",
+          "reason": "Packages cannot depend on apps (constitution.md principle V)"
+        },
+        {
+          "from": "@expo-starter/*",
+          "to": "web-h5",
+          "reason": "Packages cannot depend on apps (constitution.md principle V)"
+        }
+      ]
+    }
+  }
+}
